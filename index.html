@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+	<meta name="description" content="brezplačna online izdelava xml e-računa po standardu eSlog 2.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" /> 
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#51447B" />
+    <title>e-račun</title>
+    <link rel="manifest" href="manifest.json" /> 
+	<link rel="apple-touch-icon" href="icon.png" />
+	<link rel="apple-touch-startup-image" href="icon.png" />
+    <style>
+
+* { font-family: sans-serif; }
+
+.flex-container { display: flex; flex-wrap: wrap; }
+.flex-item-left { padding: 1em; box-sizing: border-box; flex: 50%; }
+.flex-item-right { padding: 1em; box-sizing: border-box; flex: 50%; }
+
+@media (max-width: 600px) {
+  .flex-item-right, .flex-item-left { flex: 100%; }
+}
+
+#tbl1, #tbl2, #tbl3, #tbl4 { border: none; border-collapse: separate; width: 100%; }
+#tbl4a, #tbl4b { border: none; border-collapse: separate; }
+#tbl1 tr:nth-child(odd) > td, #tbl2 tr:nth-child(odd) > td, #tbl3 tr:nth-child(odd) > td {
+ padding-top: 0.7em; font-size: 0.8em; color: #808080; }
+#tbl4 td:nth-child(2), #tbl4 td:nth-child(4), #tbl4 td:nth-child(5), #tbl4 td:nth-child(6), #tbl4 td:nth-child(7), #tbl4 td:nth-child(8) { text-align: right; }
+#tbl4 th, #tbl4a th { text-align: left; font-size: 0.8em; font-weight: normal; color: #808080; padding: 0.1em 0.3em; }
+#tbl4a td, #tbl4b td { text-align: right; padding: 0.1em 0.3em; }
+#tbl4b td:nth-child(1) { font-size: 0.8em; color: #808080; }
+
+.inp { border: 1px solid #808080; background-color: #F7F7F7; height: 1.4em; cursor: pointer; }
+
+.obm1 { background-color: #FFFACD; }
+.obm2 { background-color: #FFEFD5; }
+.obm3 { margin: 0.7em 0em; padding: 1em; background-color: #E0FAD2; }
+.obm4 { margin: 0.7em 0em; padding: 1em; background-color: #EFE3F9; }
+
+.shrani { text-align: center; margin: 1em; }
+.shranib { font-size: 1.2em; }
+
+.info { position: absolute; background-color: coral; padding: 0.2em; margin: 0.2em 0em; font-size: 0.7em; }
+
+#vnos { width: 100%; border: none; background: transparent; margin: 0; padding: 0; font-size: 1em; }
+#vnos:focus { outline-width: 0; }
+
+    </style>
+  </head>
+  <body>
+<h3>e-račun po standardu eSlog 2.0</h3> 
+<hr />
+<div><button type="button" onclick="loadJson();">napolni s podatki iz prejšnjega e-računa</button> &nbsp; &nbsp; <button type="button" onclick="novRacun();">nov račun</button></div>
+<hr />
+<div class="flex-container">
+
+<div class="flex-item-left obm1">
+<div><b>prodajalec (izdajatelj računa)</b></div>
+<table id="tbl1"><colgroup><col span="1" style="width: 50%;" /><col span="1" style="width: 50%;" /></colgroup><tbody>
+  <tr><td colspan="2">ime oz. naziv:</td></tr>
+  <tr><td colspan="2" class="inp"></td></tr>
+  <tr><td colspan="2">naslov:</td></tr>
+  <tr><td colspan="2" class="inp"></td></tr>
+  <tr><td>poštna številka:</td><td>kraj:</td></tr>
+  <tr><td class="inp"></td><td class="inp"></td></tr>
+  <tr><td>davčna številka:</td><td>matična številka:</td></tr>
+  <tr><td class="inp" data-info="davčni zavezanci imajo pred davčno številko predpono SI"></td><td class="inp"></td></tr>
+  <tr><td>iban:</td><td>bic/swift:</td></tr>
+  <tr><td class="inp" data-info="SI56xxxxxxx..."></td><td class="inp"></td></tr>
+</tbody></table>
+</div>
+
+<div class="flex-item-right obm2">
+<div><b>kupec (plačnik računa)</b></div>
+<table id="tbl2"><colgroup><col span="1" style="width: 50%;" /><col span="1" style="width: 50%;" /></colgroup><tbody>
+  <tr><td colspan="2">ime oz. naziv:</td></tr>
+  <tr><td colspan="2" class="inp"></td></tr>
+  <tr><td colspan="2">naslov:</td></tr>
+  <tr><td colspan="2" class="inp"></td></tr>
+  <tr><td>poštna številka:</td><td>kraj:</td></tr>
+  <tr><td class="inp"></td><td class="inp"></td></tr>
+  <tr><td>davčna številka:</td><td></td></tr>
+  <tr><td class="inp" data-info="davčni zavezanci imajo pred davčno številko predpono SI"></td><td></td></tr>
+</tbody></table>
+</div>
+
+</div>
+
+<hr />
+
+<div class="obm3">
+<table id="tbl3"><colgroup><col span="1" style="width: 12%;" /><col span="1" style="width: 12%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 46%;" /></colgroup><tbody>
+  <tr><td>številka računa:</td><td>sklic:</td><td>datum računa:</td><td>datum dobave/storitve:</td><td>rok plačila:</td><td>opomba:</td></tr>
+  <tr><td class="inp"></td><td class="inp"></td><td class="inp" data-tip="d" data-info="DD.MM.LLLL"></td><td class="inp" data-tip="d" data-info="DD.MM.LLLL"></td><td class="inp" data-tip="d" data-info="DD.MM.LLLL"></td><td class="inp"></td></tr>
+</tbody></table>
+</div>
+
+<hr />
+
+<div class="obm4">
+<table id="tbl4"><colgroup><col span="1" style="width: 20%;" /><col span="1" style="width: 5%;" /><col span="1" style="width: 5%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 10%;" /><col span="1" style="width: 5%;" /></colgroup>
+<thead><tr><th>opis/artikel:</th><th>količina:</th><th>em:</th><th>neto cena na enoto v €:</th><th>ddv v %:</th><th>neto znesek v €:</th><th>znesek ddv v €:</th><th>bruto znesek v €:</th><th>☐</th></tr></thead>
+<tbody id="bdy4"><tr><td class="inp"></td><td class="inp" data-tip="n"></td><td class="inp"></td><td class="inp" data-tip="z"></td><td class="inp" data-tip="n"></td><td></td><td></td><td></td><td><button type="button" onclick="rClr(this);">zbriši</button></td></tr></tbody>
+</table>
+<button type="button" onclick="rAdd();">dodaj novo vrstico</button>
+
+<br />
+<div class="flex-container">
+<div class="flex-item-left">
+<table id="tbl4a"><thead><tr><th>stopnja ddv v %:</th><th>davčna osnova v €:</th><th>znesek davka v €:</th></tr></thead><tbody id="bdy4a"></tbody></table>
+</div>
+<div class="flex-item-right">
+<table id="tbl4b"><tbody><tr><td>osnova za ddv v €:</td><td>0,00</td></tr><tr><td>znesek ddv v €:</td><td>0,00</td></tr><tr><td>skupaj za plačilo v €:</td><td>0,00</td></tr></tbody></table>
+</div>
+</div>
+
+</div>
+
+<div class="shrani">
+<button type="button" class="shranib" onclick="saveXml();">shrani e-račun</button>
+</div>
+
+<hr />
+
+<div>
+Dodatne storitve in informacije: &nbsp;   
+<a href="https://www.eracuni.si/vizualizacija" target="_blank">vizualizacija računa</a> &nbsp; 
+<a href="https://storitve.ujp.gov.si/dostop/preverjanje-strukture" target="_blank">preverjanje strukture računa</a> &nbsp; 
+<a href="https://sicas.gov.si/CES-Sign/sign/sign.htm" target="_blank">digitalni podpis računa</a>
+</div>
+
+<script src="main.js" defer></script>
+
+  </body>
+</html>

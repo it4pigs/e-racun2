@@ -1,0 +1,13 @@
+{
+ "name": "e-račun",
+ "short_name": "e-račun",
+ "description": "brezplačna online izdelava xml e-računa po standardu eSlog 2.0",
+ "lang": "sl",
+ "start_url": "./",
+ "scope": "./",
+ "theme_color": "#51447B",
+ "background_color": "#FFFFFF",
+ "icons": [{"src": "icon.png", "sizes": "512x512", "type": "image/png"}, {"src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}],
+ "display": "standalone"	
+}
+
