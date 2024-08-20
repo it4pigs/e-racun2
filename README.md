@@ -1,2 +1,5 @@
 # e-racun2
-brezplačna online izdelava xml e-računa po standardu eSlog 2.0
+PWA (progressive web app) za izdelavo xml e-računa po standardu eSlog 2.0
+
+### live preview
+https://e-racun2.web.app/
